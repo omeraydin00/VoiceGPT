@@ -1,88 +1,81 @@
-# 🎙️ VoiceGPT – Lokal Türkçe Sesli Asistan
+<div align="center">
 
-VoiceGPT, mikrofonla konuştuğunuzda sesinizi yazıya çeviren, anlamlı cevaplar üreten ve cevabı sesli olarak size okuyan tamamen **lokal çalışan** bir yapay zeka asistanıdır.
+# VoiceGPT
 
----
+**A Turkish voice assistant with local speech recognition and a local language model.**
 
-## 🎬 Tanıtım Videosu
+Speak into the microphone, get a natural Turkish answer as text and as speech.
 
-[![VoiceGPT Tanıtım Videosu](https://img.youtube.com/vi/KPB3i5rgoHY/hqdefault.jpg)](https://www.youtube.com/watch?v=KPB3i5rgoHY)
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)
+![Whisper](https://img.shields.io/badge/Whisper-Speech%20to%20Text-412991?style=flat-square&logo=openai&logoColor=white)
+![Ollama](https://img.shields.io/badge/Ollama-Llama%203-000000?style=flat-square&logo=ollama&logoColor=white)
+![Gradio](https://img.shields.io/badge/Gradio-UI-F97316?style=flat-square)
+![gTTS](https://img.shields.io/badge/gTTS-Text%20to%20Speech-4285F4?style=flat-square&logo=google&logoColor=white)
 
-> Yukarıdaki görsele tıklayarak projeyi canlı olarak izleyebilirsiniz.
+[![VoiceGPT demo video](https://img.youtube.com/vi/KPB3i5rgoHY/hqdefault.jpg)](https://www.youtube.com/watch?v=KPB3i5rgoHY)
 
----
+*Click the image to watch the demo.*
 
-## 🚀 Özellikler
-
-- Mikrofondan ses alma
-- OpenAI Whisper ile ses → yazı dönüşümü
-- Ollama destekli LLM (llama3) ile doğal Türkçe yanıtlar
-- gTTS ile metni sese dönüştürme
-- İnternetsiz çalışabilir (tamamen lokal)
-- Gradio arayüzü üzerinden kullanım
+</div>
 
 ---
 
-## Kurulum
+## How it works
 
-### 1. Gerekli programlar
-
-- ✅ [Python 3.10+](https://www.python.org/downloads/)
-- ✅ [FFmpeg](https://ffmpeg.org/download.html) (Whisper için zorunlu)
-- ✅ [Ollama](https://ollama.com/download) (yerel LLM çalıştırmak için)
-
-> 💡 `ollama` kurulduktan sonra terminale şu komutu girerek model indirilmelidir:
-
-```bash
-ollama run llama3
+```mermaid
+flowchart LR
+    M[🎙️ Microphone] --> W[Whisper base<br/>speech to text]
+    W --> L[Llama 3 via Ollama<br/>Turkish answer]
+    L --> T[Text answer]
+    L --> G[gTTS<br/>text to speech]
+    G --> S[🔊 Spoken answer]
 ```
 
-### 2. Proje Dosyasını ve Gereksinimleri Yükle
+| Step | Component | Runs |
+|---|---|---|
+| Speech to text | OpenAI Whisper (`base` model, Turkish) | Locally |
+| Answer generation | Llama 3 through Ollama, with a system prompt for short, natural Turkish | Locally |
+| Text to speech | gTTS | Uses Google's TTS service, needs an internet connection |
+| Interface | Gradio, with microphone input and audio output | Locally |
+
+Your voice and your question never leave the machine. Only the generated answer text is sent to gTTS to be turned into speech.
+
+## Screenshots
+
+<img alt="VoiceGPT interface" src="https://github.com/user-attachments/assets/32e8259f-c8b0-4af0-99a8-a6744c128b89" />
+
+> **Question:** *"İstanbul'da gezmek için nereye gidebilirim?"*
+> **Answer:** *"İstanbul'un birçok cazibe noktası var! Sultanahmet'i ziyaret etmelisiniz…"*
+
+<img alt="VoiceGPT answer" src="https://github.com/user-attachments/assets/6a21b0db-79ca-45e4-a306-bd110e35c112" />
+
+## Getting started
+
+**Requirements:** Python 3.10+, [FFmpeg](https://ffmpeg.org/download.html) (needed by Whisper) and [Ollama](https://ollama.com).
 
 ```bash
+# 1. Pull the model
+ollama pull llama3
+
+# 2. Clone and install
+git clone https://github.com/omeraydin00/VoiceGPT.git
+cd VoiceGPT/VoiceGPT
 pip install -r requirements.txt
-```
 
-### 3. Kullanım
-
-```bash
+# 3. Run
 python app.py
 ```
 
-Arayüz otomatik olarak açılır:
-📍 http://127.0.0.1:7860
-Mikrofona konuş.
-Sesin yazıya çevrilsin.
-LLM yanıt versin.
-Cevap sesli olarak oynatılsın.
+The interface opens at **http://127.0.0.1:7860**. Record your question and press submit.
 
+## Customizing
 
----
-## 4. Proje Yapısı 
-```
-VoiceGPT/
-├── app.py              # Ana Python uygulaması
-├── requirements.txt    # Bağımlılıklar
-├── .gradio/flagged/    # Flag edilen örnekler ve CSV
-└── README.md           
-```
-
-📌 Notlar
-
-Ollama ile llama3 modeli kullanılmıştır. Dilersen mistral, gemma veya llama2 ile değiştirebilirsin.
-
-flag butonu ile ses, yanıt ve sesli çıktı .csv olarak kaydedilir (proje klasöründeki .gradio/flagged/ içinde).
-
-Türkçe karakter desteği için gtts kullanılmıştır.
+- **Model:** change `model="llama3"` in `app.py` to `mistral`, `gemma` or any model you have in Ollama.
+- **Speed vs. accuracy:** swap Whisper's `base` model for `tiny` (faster) or `small` / `medium` (more accurate).
+- **Flagging:** the *Flag* button saves the audio, answer and spoken reply to `flagged/` as CSV for later review.
 
 ---
 
-## 5. Ekran Görüntüleri
-
-<img width="1615" height="955" alt="image" src="https://github.com/user-attachments/assets/32e8259f-c8b0-4af0-99a8-a6744c128b89" />
-
-## Soru - İstanbulda gezmek için nereye gidebilirim?
-
-## Cevap - İstanbul'un birçok cazibe noktası var! Sultanahmet'i ziyaret etmelisiniz, hem tarihi yapıları hem de muhteşem manzaranın tadını çıkarabilirsiniz. Ayrıca Beyazıt Çarşısı, Galata Kulesi, Topkapi Sarayı ve Eminönü'deki balıkçı limanı da keyifle gezmeye değsin.
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/6a21b0db-79ca-45e4-a306-bd110e35c112" />
-
+<div align="center">
+Built by <a href="https://github.com/omeraydin00">Ömer Faruk Aydın</a>
+</div>
