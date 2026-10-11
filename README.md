@@ -1,4 +1,6 @@
-# VoiceGPT
+<p align="center">
+  <img src="./assets/header.svg" alt="VoiceGPT" width="100%" />
+</p>
 
 A Turkish voice assistant: speak, and it answers in text and out loud.
 
