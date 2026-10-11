@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-label="VoiceGPT: A Turkish voice assistant that answers out loud.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0D1117"/>
+      <stop offset="1" stop-color="#161B22"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.5" r="0.42">
+      <stop offset="0" stop-color="#1F6FEB" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#1F6FEB" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#58A6FF"/>
+      <stop offset="1" stop-color="#BC8CFF"/>
+    </linearGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="#8B949E" opacity="0.18"/>
+    </pattern>
+    <clipPath id="frame"><rect width="1200" height="260" rx="16"/></clipPath>
+    <style>
+      .mono  { font: 500 15px 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace; fill: #8B949E; }
+      .name  { font: 700 48px 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; fill: #F0F6FC; letter-spacing: -1px; }
+      .meta  { font: 400 18px 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; fill: #8B949E; }
+      .stack { font: 500 15px 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace; fill: url(#accent); }
+      .label { font: 600 14px 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; fill: #C9D1D9; }
+      .small { font: 600 12px 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace; fill: #8B949E; }
+      .hub   { font: 700 13px 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace; fill: #F0F6FC; letter-spacing: 1px; }
+      .flow { stroke-dasharray: 6 14; animation: dash 1.2s linear infinite; opacity: 0.55; }
+      @keyframes dash { to { stroke-dashoffset: -40; } }
+      .in { animation: in 0.8s ease-out backwards; }
+      .i1 { animation-delay: 0.05s; } .i2 { animation-delay: 0.2s; } .i3 { animation-delay: 0.35s; } .i4 { animation-delay: 0.5s; }
+      @keyframes in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+      .pulse { transform-origin: 776px 130px; animation: pulse 2.4s ease-out infinite; } @keyframes pulse { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.8); opacity: 0; } }
+    </style>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="1200" height="260" fill="url(#bg)"/>
+    <rect width="1200" height="260" fill="url(#dots)"/>
+    <rect width="1200" height="260" fill="url(#glow)"/>
+    <rect x="0.75" y="0.75" width="1198.5" height="258.5" rx="15.5" fill="none" stroke="#30363D" stroke-width="1.5"/>
+
+    <text x="64" y="70" class="mono in i1">~/omeraydin00/VoiceGPT</text>
+    <text x="62" y="130" class="name in i2">VoiceGPT</text>
+    <text x="64" y="172" class="meta in i3">A Turkish voice assistant that answers out loud.</text>
+    <text x="64" y="212" class="stack in i4">Python · Whisper · Llama 3 · Gradio</text>
+
+    <circle cx="776" cy="130" r="36" fill="#1F6FEB" class="pulse"/>
+    <circle cx="776" cy="130" r="36" fill="#0D1117" stroke="url(#accent)" stroke-width="2.5"/>
+    <g stroke="#58A6FF" stroke-width="2.4" fill="none" stroke-linecap="round" transform="translate(776 130)">
+      <rect x="-7" y="-17" width="14" height="22" rx="7"/><path d="M-13 -2 a13 13 0 0 0 26 0 M0 11 V18 M-7 18 H7"/>
+    </g>
+    <rect x="838" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;30;70;19;35;8" dur="1.6s" begin="0.00s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;115.0;95.0;120.5;112.5;126.0" dur="1.6s" begin="0.00s" repeatCount="indefinite"/></rect><rect x="847" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;51;13;14;62;8" dur="1.6s" begin="0.05s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;104.5;123.5;123.0;99.0;126.0" dur="1.6s" begin="0.05s" repeatCount="indefinite"/></rect><rect x="856" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;44;16;33;47;8" dur="1.6s" begin="0.10s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;108.0;122.0;113.5;106.5;126.0" dur="1.6s" begin="0.10s" repeatCount="indefinite"/></rect><rect x="865" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;13;68;42;23;8" dur="1.6s" begin="0.15s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;123.5;96.0;109.0;118.5;126.0" dur="1.6s" begin="0.15s" repeatCount="indefinite"/></rect><rect x="874" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;12;15;37;36;8" dur="1.6s" begin="0.20s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;124.0;122.5;111.5;112.0;126.0" dur="1.6s" begin="0.20s" repeatCount="indefinite"/></rect><rect x="883" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;14;25;15;45;8" dur="1.6s" begin="0.25s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;123.0;117.5;122.5;107.5;126.0" dur="1.6s" begin="0.25s" repeatCount="indefinite"/></rect><rect x="892" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;37;13;62;46;8" dur="1.6s" begin="0.30s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;111.5;123.5;99.0;107.0;126.0" dur="1.6s" begin="0.30s" repeatCount="indefinite"/></rect><rect x="901" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;17;70;24;50;8" dur="1.6s" begin="0.35s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;121.5;95.0;118.0;105.0;126.0" dur="1.6s" begin="0.35s" repeatCount="indefinite"/></rect><rect x="910" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;50;47;70;13;8" dur="1.6s" begin="0.40s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;105.0;106.5;95.0;123.5;126.0" dur="1.6s" begin="0.40s" repeatCount="indefinite"/></rect><rect x="919" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;46;47;35;13;8" dur="1.6s" begin="0.45s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;107.0;106.5;112.5;123.5;126.0" dur="1.6s" begin="0.45s" repeatCount="indefinite"/></rect><rect x="928" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;24;12;45;64;8" dur="1.6s" begin="0.50s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;118.0;124.0;107.5;98.0;126.0" dur="1.6s" begin="0.50s" repeatCount="indefinite"/></rect><rect x="937" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;18;28;36;19;8" dur="1.6s" begin="0.55s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;121.0;116.0;112.0;120.5;126.0" dur="1.6s" begin="0.55s" repeatCount="indefinite"/></rect><rect x="946" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;44;17;46;29;8" dur="1.6s" begin="0.60s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;108.0;121.5;107.0;115.5;126.0" dur="1.6s" begin="0.60s" repeatCount="indefinite"/></rect><rect x="955" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;45;62;53;21;8" dur="1.6s" begin="0.65s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;107.5;99.0;103.5;119.5;126.0" dur="1.6s" begin="0.65s" repeatCount="indefinite"/></rect><rect x="964" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;16;47;46;50;8" dur="1.6s" begin="0.70s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;122.0;106.5;107.0;105.0;126.0" dur="1.6s" begin="0.70s" repeatCount="indefinite"/></rect><rect x="973" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;22;33;16;45;8" dur="1.6s" begin="0.75s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;119.0;113.5;122.0;107.5;126.0" dur="1.6s" begin="0.75s" repeatCount="indefinite"/></rect><rect x="982" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;55;14;46;13;8" dur="1.6s" begin="0.80s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;102.5;123.0;107.0;123.5;126.0" dur="1.6s" begin="0.80s" repeatCount="indefinite"/></rect><rect x="991" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;49;23;41;53;8" dur="1.6s" begin="0.85s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;105.5;118.5;109.5;103.5;126.0" dur="1.6s" begin="0.85s" repeatCount="indefinite"/></rect><rect x="1000" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;44;37;59;30;8" dur="1.6s" begin="0.90s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;108.0;111.5;100.5;115.0;126.0" dur="1.6s" begin="0.90s" repeatCount="indefinite"/></rect><rect x="1009" y="126" width="4" height="8" rx="2" fill="url(#accent)"><animate attributeName="height" values="8;39;47;69;39;8" dur="1.6s" begin="0.95s" repeatCount="indefinite"/><animate attributeName="y" values="126.0;110.5;106.5;95.5;110.5;126.0" dur="1.6s" begin="0.95s" repeatCount="indefinite"/></rect>
+    <g transform="translate(1080 130)">
+      <path d="M-50 -26 H50 a14 14 0 0 1 14 14 V12 a14 14 0 0 1 -14 14 H-36 L-48 36 L-46 26 H-50 a14 14 0 0 1 -14 -14 V-12 a14 14 0 0 1 14 -14 Z" fill="#161B22" stroke="#30363D" stroke-width="1.5"/>
+    </g>
+    <circle cx="1066" cy="130" r="4" fill="#C9D1D9"><animate attributeName="opacity" values="0.25;1;0.25" dur="1.2s" begin="0.0s" repeatCount="indefinite"/></circle><circle cx="1080" cy="130" r="4" fill="#C9D1D9"><animate attributeName="opacity" values="0.25;1;0.25" dur="1.2s" begin="0.2s" repeatCount="indefinite"/></circle><circle cx="1094" cy="130" r="4" fill="#C9D1D9"><animate attributeName="opacity" values="0.25;1;0.25" dur="1.2s" begin="0.4s" repeatCount="indefinite"/></circle>
+  </g>
+</svg>
