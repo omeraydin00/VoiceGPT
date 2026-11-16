@@ -1,84 +1,116 @@
 # Gerekli kütüphaneleri içe aktar
-import gradio as gr
-import whisper
-import ollama
-from gtts import gTTS
 import os
 import tempfile
 
-# 1. Whisper modelini yükle (local ses → metin)
-model = whisper.load_model("base")  # "tiny" daha hızlı, "small"/"medium" daha kaliteli
+import gradio as gr
+import ollama
+import whisper
+from gtts import gTTS
 
-# 2. Ollama LLM ile yanıt üret
-def generate_response_with_ollama(prompt):
-    # LLM'e sistem ve kullanıcı mesajı gönderilir
-    response = ollama.chat(
-        model="llama3",  # Alternatif: "mistral", "gemma"
-        messages=[
-            {
-                "role": "system",
-                "content": (
-                    "Sen sade ve doğal Türkçe konuşan bir asistansın. "
-                    "Cümlelerin düzgün ve kurallı olsun. "
-                    "Yanıtlarında doğru Türkçe karakterler (ç, ğ, ı, ö, ş, ü) kullan. "
-                    "Kısa ve net cevaplar ver."
-                )
-            },
-            {
-                "role": "user",
-                "content": prompt  # Whisper'dan gelen metin
-            }
-        ]
-    )
-    return response["message"]["content"]
+LLM = os.environ.get("VOICEGPT_MODEL", "llama3")  # Alternatif: "mistral", "gemma"
+WHISPER = os.environ.get("VOICEGPT_WHISPER", "small")  # "base" daha hızlı, "medium" daha kaliteli
 
-# 3. Ana işlem fonksiyonu: Ses al > Yazıya çevir > Cevapla > Sese çevir
-def chat_with_voice(audio_path):
-    print("⏺️ Alınan dosya yolu:", audio_path)
-
-    # 3.1 Whisper ile ses → yazı
-    try:
-        result = model.transcribe(audio_path, language="tr")
-        user_text = result["text"]
-        print("📝 Yazıya çevrilen metin:", user_text)
-    except Exception as e:
-        print("❌ Whisper hatası:", repr(e))
-        return f"Whisper hatası: {e}", None
-
-    # 3.2 Ollama ile yanıt oluştur
-    try:
-        response_text = generate_response_with_ollama(user_text)
-        print("🤖 Ollama cevabı:", response_text)
-    except Exception as e:
-        print("❌ Ollama hatası:", repr(e))
-        return f"Ollama hatası: {e}", None
-
-    # 3.3 gTTS ile yanıtı sese çevir
-    try:
-        tts = gTTS(text=response_text, lang="tr")
-        tts_path = tempfile.mktemp(suffix=".mp3")
-        tts.save(tts_path)
-        print("🔊 Sesli yanıt kaydedildi:", tts_path)
-    except Exception as e:
-        print("❌ TTS hatası:", repr(e))
-        return response_text, None
-
-    return response_text, tts_path
-
-# 4. Gradio Arayüzü
-iface = gr.Interface(
-    fn=chat_with_voice,
-    inputs=gr.Audio(sources=["microphone"], type="filepath"),  # Mikrofon girişi
-    outputs=[
-        gr.Textbox(label="Yanıt"),       # Metin çıktısı
-        gr.Audio(label="Sesli Yanıt")    # Ses çıktısı
-    ],
-    title="VoiceGPT – Lokal Whisper + Ollama Destekli Asistan",
-    description="🎙️ Mikrofona konuş, yazıya çevir, Ollama modeliyle doğal cevap al ve sesli dinle!",
-    allow_flagging="manual",     # Manuel flag butonu aktif
-    flagging_dir="flagged",      # Flag edilen örneklerin kaydedileceği klasör
-    flagging_callback=gr.CSVLogger()  # CSV formatında kaydeder
+SYSTEM = (
+    "Sen sade ve doğal Türkçe konuşan bir sesli asistansın. "
+    "Cevapların sesli okunacak: kısa tut, en fazla üç cümle yaz, liste, başlık ya da emoji kullanma. "
+    "Yanıtlarında doğru Türkçe karakterler (ç, ğ, ı, ö, ş, ü) kullan."
 )
 
-# 5. Uygulamayı başlat
-iface.launch()
+# 1. Whisper modelini yükle (local ses → metin)
+model = whisper.load_model(WHISPER)
+
+
+def text_of(message):
+    # The chatbot sends messages back as a list of parts ({"type": "text", "text": ...})
+    content = message["content"]
+    if isinstance(content, str):
+        return content
+    return " ".join(part.get("text", "") for part in content if isinstance(part, dict))
+
+
+# 2. Ollama LLM ile yanıt üret; önceki mesajlar da gider, böylece konuşma sürer
+def generate_response_with_ollama(history):
+    messages = [{"role": "system", "content": SYSTEM}]
+    messages += [{"role": m["role"], "content": text_of(m)} for m in history if text_of(m)]
+    response = ollama.chat(model=LLM, messages=messages, options={"temperature": 0.4})
+    return response["message"]["content"].strip().strip('"')
+
+
+# 3. gTTS ile yanıtı sese çevir
+def speak(text):
+    with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
+        gTTS(text=text, lang="tr").write_to_fp(f)
+        return f.name
+
+
+# 4. Ana işlem: ses ya da yazı al > cevapla > sese çevir
+def reply(audio_path, typed, history):
+    history = history or []
+    if audio_path:
+        try:
+            user_text = model.transcribe(audio_path, language="tr")["text"].strip()
+        except Exception as e:
+            gr.Warning(f"Ses yazıya çevrilemedi: {e}")
+            return history, None, "", None
+    else:
+        user_text = (typed or "").strip()
+    if not user_text:
+        return history, None, "", None
+
+    history = history + [{"role": "user", "content": user_text}]
+    try:
+        answer = generate_response_with_ollama(history)
+    except Exception as e:
+        gr.Warning(f"Ollama'ya ulaşılamadı: {e}")
+        return history, None, "", None
+    history = history + [{"role": "assistant", "content": answer}]
+
+    try:
+        voice = speak(answer)
+    except Exception as e:  # gTTS needs the internet; the text answer still shows
+        gr.Warning(f"Sesli yanıt oluşturulamadı: {e}")
+        voice = None
+    return history, voice, "", None
+
+
+CSS = """
+.gradio-container { max-width: 980px !important; margin: 0 auto !important; }
+#baslik h1 { margin-bottom: 0; font-size: 28px; letter-spacing: -0.5px; }
+#baslik p { margin-top: 4px; color: var(--body-text-color-subdued); }
+footer { display: none !important; }
+"""
+
+theme = gr.themes.Soft(primary_hue="orange", neutral_hue="stone", font=[gr.themes.GoogleFont("Inter"), "system-ui", "sans-serif"]).set(
+    block_label_background_fill="transparent",
+    block_label_background_fill_dark="transparent",
+    block_label_text_color="*body_text_color_subdued",
+    block_label_text_color_dark="*body_text_color_subdued",
+    block_label_border_width="0px",
+)
+
+# 5. Gradio arayüzü
+with gr.Blocks(title="VoiceGPT") as demo:
+    gr.Markdown(
+        f"# VoiceGPT\nTürkçe sorun, sesli cevap alın. Konuşma tanıma Whisper ({WHISPER}), cevaplar {LLM} ile bu bilgisayarda üretilir.",
+        elem_id="baslik",
+    )
+    chat = gr.Chatbot(label="Konuşma", height=420, buttons=["copy"], placeholder="Mikrofona basıp bir şey sorun, ya da aşağıya yazın.")
+    with gr.Row(equal_height=True):
+        mic = gr.Audio(sources=["microphone", "upload"], type="filepath", label="Konuşun", scale=3)
+        with gr.Column(scale=2):
+            typed = gr.Textbox(label="ya da yazın", placeholder="Örn. İstanbul'da nereleri gezmeliyim?", lines=1, max_lines=3)
+            with gr.Row():
+                send = gr.Button("Gönder", variant="primary")
+                new = gr.Button("Yeni konuşma")
+    voice = gr.Audio(label="Sesli yanıt", autoplay=True, interactive=False)
+
+    outputs = [chat, voice, typed, mic]
+    mic.stop_recording(reply, [mic, typed, chat], outputs)
+    mic.upload(reply, [mic, typed, chat], outputs)
+    send.click(reply, [gr.State(None), typed, chat], outputs)
+    typed.submit(reply, [gr.State(None), typed, chat], outputs)
+    new.click(lambda: ([], None, "", None), None, outputs)
+
+# 6. Uygulamayı başlat
+if __name__ == "__main__":
+    demo.launch(theme=theme, css=CSS)
