@@ -6,13 +6,27 @@ A Turkish voice assistant: speak, and it answers in text and out loud, and remem
 
 Python · Whisper · Ollama (Llama 3) · gTTS · Gradio
 
-<img alt="A two-question conversation with VoiceGPT, the second answer being read out" src="screenshots/sohbet.png" />
+<img alt="VoiceGPT: ask out loud, hear the answer" src="./assets/cover.jpg" />
 
 Your recording is turned into text by Whisper, answered in short, natural Turkish by Llama 3 through Ollama, and read back with gTTS. The whole conversation goes to the model each time, so a follow-up like *"Peki akşam yemeği için nereyi önerirsin?"* is answered in the context of the question before it. You can also type instead of speaking, or upload a recording.
 
-Speech recognition and the language model run on your computer; only the answer text is sent to gTTS to be spoken. If gTTS cannot be reached, the written answer still appears.
-
 [Watch the demo on YouTube](https://www.youtube.com/watch?v=KPB3i5rgoHY)
+
+## Screens
+
+<img alt="A two-question conversation: the second question is answered in the context of the first, and read aloud" src="./assets/screens.jpg" />
+
+<details>
+<summary>Full-size screenshot</summary>
+<br/>
+<img alt="A two-question conversation with VoiceGPT, the second answer being read out" src="screenshots/sohbet.png" />
+</details>
+
+## How it works
+
+<img alt="From voice to voice: microphone, Whisper, the conversation so far, Llama 3 and gTTS" src="./assets/flow.jpg" />
+
+Speech recognition and the language model run on your computer; only the answer text is sent to gTTS to be spoken. If gTTS cannot be reached, the written answer still appears.
 
 ## Running it
 
